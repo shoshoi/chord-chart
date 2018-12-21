@@ -1,17 +1,27 @@
 require 'rails_helper'
-
+pitch_data = [
+  {
+    key: "C",
+    values: [
+      {value: "C", result: 0 }, {value: "D", result: 2 }, {value: "E", result: 4 }, {value: "F", result: 5 },
+      {value: "G", result: 7 }, {value: "A", result: 9 }, {value: "B", result: 11 },
+    ]
+  }
+]
 RSpec.describe Chord, type: :model do
-  describe '正常系' do
+  describe 'メソッド' do
     before do
       @chord = Chord.new("C","C")
     end
-    context 'newしたとき' do
-      it "引数がなければ、key=Cmajで生成される" do
-        expect(@chord.key).to eq "C"
-        expect(@chord.pitch).to eq "C"
-        expect(@chord.signature).to eq ""
-        expect(@chord.scale).to eq "major"
-        expect(@chord.pitch_class).to eq 0
+    context '#pitch_class' do
+      pitch_data.each do |data|
+        data[:values].each do |value|
+          it "key=#{data[:key]} コード#{value[:value]}のとき、相対音程#{value[:result]}を取得する" do
+            @chord = Chord.new(data[:key], value[:value])
+            expect(@chord.key).to eq data[:key]
+            expect(@chord.interval).to eq value[:result]
+          end
+        end
       end
     end
   end

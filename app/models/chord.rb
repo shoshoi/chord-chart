@@ -26,7 +26,7 @@ class Chord
     scale_str = "M" if scale_str.blank?
     @scale = @scale_list[scale_str.to_sym]
   end
-  def pitch_class
+  def interval
     root_pitch_class = @pitch_list[key.to_sym]
     pitch_class = @pitch_list[pitch.to_sym]
     if root_pitch_class > pitch_class
