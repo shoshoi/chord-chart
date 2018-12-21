@@ -9,7 +9,7 @@ RSpec.describe ChordChart, type: :model do
       it "引数がなければ、key=Cmajで生成される" do
         expect(@chart.key).to eq "C"
         expect(@chart.root).to eq "C"
-        expect(@chart.type).to eq "major"
+        expect(@chart.scale).to eq "major"
       end
 
       it "引数あり" do
