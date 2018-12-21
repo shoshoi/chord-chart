@@ -1,0 +1,2 @@
+class ChordProgression < ApplicationRecord
+end

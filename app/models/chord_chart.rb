@@ -1,0 +1,2 @@
+class ChordChart < ApplicationRecord
+end
