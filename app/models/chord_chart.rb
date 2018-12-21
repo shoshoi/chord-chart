@@ -1,5 +1,5 @@
 class ChordChart
-
+  prev = nil
   def key
     @key
   end
@@ -14,15 +14,23 @@ class ChordChart
     @key = key || "C"
     @root = key || "C"
     @scale = "major"
-    @blocks = []
+Rails.logger.debug "none"
   end
 
-  def append(str)
-    @blocks.push Block.new(@key, str)
+  def initialize(key=nil, chord=nil)
+    @key = key || "C" 
+    @root = key || "C" 
+    @scale = "major"
+    Rails.logger.debug "1#{@key}#{chord}"
+    @block = Block.new(@key, chord)
+  end
+
+  def set_chord(chord=nil)
+    @block = Block.new(@key, chord)
   end
 
   def inspect
-    @blocks.map {|block| block.inspect}
+    @block.inspect
   end
 
 end
