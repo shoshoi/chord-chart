@@ -16,12 +16,36 @@ RSpec.describe Chord, type: :model do
     context '#pitch_class' do
       pitch_data.each do |data|
         data[:values].each do |value|
-          it "key=#{data[:key]} コード#{value[:value]}のとき、相対音程#{value[:result]}を取得する" do
+          it "key=#{data[:key]} chord=#{value[:value]}のとき、音程#{value[:result]}を取得する" do
             @chord = Chord.new(data[:key], value[:value])
             expect(@chord.key).to eq data[:key]
             expect(@chord.interval).to eq value[:result]
           end
         end
+      end
+    end
+    context "#methods" do
+      it "kari" do
+        @chord.tonic
+        @chord.supertonic
+        @chord.mediant
+        @chord.subdominant
+        @chord.dominant
+        @chord.submediant
+        @chord.leadingtone
+
+        @chord.tonic?
+        @chord.supertonic?
+        @chord.mediant?
+        @chord.subdominant?
+        @chord.dominant?
+        @chord.submediant?
+        @chord.leadingtone?
+
+        @chord.degree_number
+        @chord.degree_name
+        @chord.tarnspose(4)
+        @chord.transpose!(4)
       end
     end
   end

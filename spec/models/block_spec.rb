@@ -10,7 +10,7 @@ data = {
 RSpec.describe Block, type: :model do
   describe '正常系' do
     before do
-      @block = Block.new(data[:value])
+      @block = Block.new(data[:value][0], data[:value][1])
     end
     context 'newしたとき' do
       it "コードが変換される" do

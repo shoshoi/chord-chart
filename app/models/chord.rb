@@ -2,8 +2,8 @@ class Chord
   def key
     @key
   end
-  def pitch
-    @pitch
+  def root
+    @root
   end
   def signature
     @signature ||= ""
@@ -18,21 +18,26 @@ class Chord
     @signature_list = {"#": "sharp", "b": "flat"}
     @scale_list = {"M": "major", "m": "minor"}
 
-    @key = key
-    @pitch = chord[0]
+    @key = key || "C"
+    @root = chord[0]
     @signature = @signature_list[chord[1]] if @signature_list.keys.include?(chord[1])
+
     scale_start = @signature.blank? ? 1 : 2
     scale_str = chord[scale_start, chord.length - scale_start]
     scale_str = "M" if scale_str.blank?
     @scale = @scale_list[scale_str.to_sym]
   end
   def interval
-    root_pitch_class = @pitch_list[key.to_sym]
-    pitch_class = @pitch_list[pitch.to_sym]
-    if root_pitch_class > pitch_class
-      relative_pitch_class = 12 - root_pitch_class + pitch_class
+    root_pitch = @pitch_list[key.to_sym]
+    current_pitch = @pitch_list[root.to_sym]
+
+    if current_pitch < root_pitch
+      relative_pitch = 12 - root_pitch + current_pitch
     else
-      relative_pitch_class = pitch_class - root_pitch_class
+      relative_pitch = current_pitch - root_pitch
     end
+  end
+  def inspect
+    "key=#{key} root=#{root} signature=#{signature} scale=#{scale}\n"
   end
 end
