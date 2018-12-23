@@ -5,47 +5,46 @@ class Chord
   @degree = nil
   @chord_name
 
+  # Chordオブジェクトを生成する
   def self.get(pitch_name, chord_name=nil)
     Rails.logger.debug "Chord#self.get(#{pitch_name}, #{chord_name})"
-    pitch_name, chord_name = Chord.get_name(pitch_name, chord_name)
+    pitch_name, chord_name = Chord.format_name(pitch_name, chord_name)
     find_chord_name = pitch_name + chord_name
-    found_chord = @@chords.find {|chord| chord.chord_full_name == find_chord_name }
-    if found_chord.blank?
+
+    # 同名コードは1つのインスタンスを使い回す
+    unless found_chord = @@chords.find {|chord| chord.full_name == find_chord_name } 
       found_chord = Chord.new(pitch_name, chord_name)
-      @@chords.push found_chord
+      @@chords.push(found_chord)
     end
     found_chord
   end
 
-  def self.get_name(pitch_name, chord_name=nil)
+  def self.format_name(pitch_name, chord_name=nil)
     if chord_name.blank?
+      full_name = pitch_name
       # pitch_name,chord_nameを再設定する
-      if @@setting.signatures.keys.include?(pitch_name[1])
-        reset_pitch_name = pitch_name[0..1]
+      if @@setting.signatures.keys.include?(full_name[1])
+        pitch_name = full_name[0..1]
       else
-        reset_pitch_name = pitch_name[0]
+        pitch_name = full_name[0]
       end 
 
-      pitch_len = reset_pitch_name.length
-      chord_len = pitch_name.length - reset_pitch_name.length
-      chord_short_name = pitch_name[pitch_len, chord_len]
-      reset_chord_name = @@setting.chords.find {|name, value| value.name.include?(chord_short_name) }.first
-
-      pitch_name = reset_pitch_name
-      chord_name = reset_chord_name
+      pitch_len = pitch_name.length
+      chord_len = full_name.length - pitch_len
+      chord_short_name = full_name[pitch_len, chord_len]
+      chord_name = @@setting.chords.find {|name, value| value.name.include?(chord_short_name) }.first
     end
     return pitch_name, chord_name
   end
 
   def initialize(pitch_name, chord_name=nil)
     Rails.logger.debug "Chord#initialize(#{pitch_name}, #{chord_name})"
-    pitch_name, chord_name = Chord.get_name(pitch_name, chord_name)
+    pitch_name, chord_name = Chord.format_name(pitch_name, chord_name)
     set_member(pitch_name, chord_name)
   end
 
   def set_member(pitch_name, chord_name="")
     Rails.logger.debug "Chord#set_member(#{pitch_name}, #{chord_name})"
-    # コード文字列を分解
     @root = Pitch.get(pitch_name)
     @chord_name = chord_name
     @degree = @@setting.chords.send(@chord_name).degree
@@ -55,8 +54,12 @@ class Chord
     @chord_name
   end 
 
-  def chord_full_name
+  def full_name
     @root.pitch_name + @chord_name
+  end
+
+  def short_name
+    @root.pitch_name + @@setting.chords.send(chord_name).name.first
   end
 
   def root
