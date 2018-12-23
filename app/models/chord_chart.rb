@@ -1,6 +1,11 @@
 class ChordChart
-  @key = nil
-  @children = []
+  include ActiveModel::Model
+  include Virtus.model
+  
+  attr_reader :degree
+  attribute :key, Chord, default: nil 
+  attribute :scale, String, default: nil
+  attribute :children, Array, default: Array.new
 
   def initialize(key="C")
     @key = Chord.get(key)
@@ -8,24 +13,11 @@ class ChordChart
   end 
 
   def add(chord)
-    @children ||= []
-    @children.push chord
+    self.children.push chord
     @children.flatten!
-  end
-
-  def key
-    @key
   end
 
   def root
     @key.root
-  end
-
-  def scale
-    @scale
-  end
-
-  def children
-    @children
   end
 end
