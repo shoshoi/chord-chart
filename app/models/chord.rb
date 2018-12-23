@@ -5,8 +5,9 @@ class Chord
   @degree = nil
   @chord_name
 
-  def self.get(pitch_name, chord_name)
+  def self.get(pitch_name, chord_name=nil)
     Rails.logger.debug "Chord#self.get(#{pitch_name}, #{chord_name})"
+    pitch_name, chord_name = Chord.get_name(pitch_name, chord_name)
     find_chord_name = pitch_name + chord_name
     found_chord = @@chords.find {|chord| chord.chord_full_name == find_chord_name }
     if found_chord.blank?
@@ -16,15 +17,14 @@ class Chord
     found_chord
   end
 
-  def initialize(pitch_name, chord_name=nil)
-    Rails.logger.debug "Chord#initialize(#{pitch_name}, #{chord_name})"
+  def self.get_name(pitch_name, chord_name=nil)
     if chord_name.blank?
       # pitch_name,chord_nameを再設定する
       if @@setting.signatures.keys.include?(pitch_name[1])
         reset_pitch_name = pitch_name[0..1]
       else
         reset_pitch_name = pitch_name[0]
-      end
+      end 
 
       pitch_len = reset_pitch_name.length
       chord_len = pitch_name.length - reset_pitch_name.length
@@ -34,6 +34,12 @@ class Chord
       pitch_name = reset_pitch_name
       chord_name = reset_chord_name
     end
+    return pitch_name, chord_name
+  end
+
+  def initialize(pitch_name, chord_name=nil)
+    Rails.logger.debug "Chord#initialize(#{pitch_name}, #{chord_name})"
+    pitch_name, chord_name = Chord.get_name(pitch_name, chord_name)
     set_member(pitch_name, chord_name)
   end
 

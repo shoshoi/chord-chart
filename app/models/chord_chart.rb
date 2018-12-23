@@ -1,36 +1,31 @@
 class ChordChart
-  prev = nil
+  @key = nil
+  @children = []
+
+  def initialize(key="C")
+    @key = Chord.get(key)
+    @scale = @key.chord_name
+  end 
+
+  def add(chord)
+    @children ||= []
+    @children.push chord
+    @children.flatten!
+  end
+
   def key
     @key
   end
+
   def root
-    @root
+    @key.root
   end
+
   def scale
     @scale
   end
 
-  def initialize(key=nil)
-    @key = key || "C"
-    @root = key || "C"
-    @scale = "major"
-Rails.logger.debug "none"
+  def children
+    @children
   end
-
-  def initialize(key=nil, chord=nil)
-    @key = key || "C" 
-    @root = key || "C" 
-    @scale = "major"
-    Rails.logger.debug "1#{@key}#{chord}"
-    @block = Block.new(@key, chord)
-  end
-
-  def set_chord(chord=nil)
-    @block = Block.new(@key, chord)
-  end
-
-  def inspect
-    @block.inspect
-  end
-
 end
