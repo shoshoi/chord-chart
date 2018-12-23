@@ -14,9 +14,9 @@ class Chord
 
   def set_member(pitch_name, chord_name="")
     Rails.logger.debug "Chord#set_member(#{pitch_name}, #{chord_name})"
-    self.root = Pitch.get(pitch_name)
+    @root = Pitch.get(pitch_name)
     @chord_name = chord_name
-    @degree = @@setting.chords.send(@chord_name).degree
+    @degree = Settings.chords.send(@chord_name).degree
   end
 
   def chord_name
@@ -24,11 +24,11 @@ class Chord
   end 
 
   def full_name
-    self.root.pitch_name + self.chord_name
+    @root.pitch_name + @chord_name
   end
 
   def short_name
-    self.root.pitch_name + @@setting.chords.send(chord_name).name.first
+    @root.pitch_name + Settings.chords.send(chord_name).name.first
   end
 
   def unizon
@@ -60,8 +60,7 @@ class Chord
   end
 
   class << self
-    @@setting = Hashie::Mash.load("config/general/setting.yml")
-    @@chords = []
+    @@chords = Array.new
     
     # Chordオブジェクトを生成する
     def get(pitch_name, chord_name=nil)
@@ -81,7 +80,7 @@ class Chord
       if chord_name.blank?
         full_name = pitch_name
         # pitch_name,chord_nameを再設定する
-        if @@setting.signatures.keys.include?(full_name[1])
+        if Settings.signatures.keys.include?(full_name[1])
           pitch_name = full_name[0..1]
         else
           pitch_name = full_name[0]
@@ -90,9 +89,9 @@ class Chord
         pitch_len = pitch_name.length
         chord_len = full_name.length - pitch_len
         chord_short_name = full_name[pitch_len, chord_len]
-        chord_name = @@setting.chords.find {|name, value| value.name.include?(chord_short_name) }.first
+        chord_name = Settings.chords.find {|name, value| value.name.include?(chord_short_name) }.first
       end
-      return pitch_name, chord_name
+      return pitch_name.to_s, chord_name.to_s
     end
   end
 end

@@ -13,7 +13,7 @@ class ChordChart
   end 
 
   def add(chord)
-    self.children.push chord
+    @children.push chord
     @children.flatten!
   end
 

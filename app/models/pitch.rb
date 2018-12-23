@@ -2,9 +2,6 @@ class Pitch
   include ActiveModel::Model
   include Virtus.model
 
-  @@setting = Hashie::Mash.load("config/general/setting.yml")
-  @@pitchs = Array.new
-
   attribute :pitch_name, String, default: nil
   attribute :pitch_class, Integer, default: nil
 
@@ -14,7 +11,7 @@ class Pitch
   def initialize(pitch_name)
     Rails.logger.debug "Pitch#self.get(#{pitch_name})"
     @pitch_name = pitch_name
-    @pitch_class = @@setting.pitch.send(pitch_name).pitch_class
+    @pitch_class = Settings.pitch.send(pitch_name).pitch_class
     if valid?
       # TODO:error
     end
@@ -40,13 +37,12 @@ class Pitch
   end
   
   class << self
-    @@setting = Hashie::Mash.load("config/general/setting.yml")
     @@pitchs = Array.new
 
     def get(pitch_name)
       Rails.logger.debug "Pitch#self.get(#{pitch_name})"
       if pitch_name.is_a?(Integer)
-        pitch_name = @@setting.pitch.find {|name, value| pitch_name == value.pitch_class }.first
+        pitch_name = Settings.pitch.find {|name, value| pitch_name == value.pitch_class }.first
       end 
 
       unless found_pitch = @@pitchs.find {|pitch| pitch.pitch_name == pitch_name }
