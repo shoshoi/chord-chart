@@ -5,6 +5,8 @@ class Chord
   attr_reader :degree
   attribute :root, Pitch, default: nil
   attribute :chord_name, String, default: nil
+  attribute :absolute_degree, Array, default: Array.new
+  attribute :relative_degree, Array, default: Array.new
 
   def initialize(pitch_name, chord_name=nil)
     Rails.logger.debug "Chord#initialize(#{pitch_name}, #{chord_name})"
@@ -16,7 +18,8 @@ class Chord
     Rails.logger.debug "Chord#set_member(#{pitch_name}, #{chord_name})"
     @root = Pitch.get(pitch_name)
     @chord_name = chord_name
-    @degree = Settings.chords.send(@chord_name).degree
+    @relative_degree = Settings.chords.send(@chord_name).degree
+    @absolute_degree = @relative_degree.map {|degree| (@root.pitch_class + degree) % 12 }
   end
 
   def chord_name
@@ -32,23 +35,23 @@ class Chord
   end
 
   def unizon
-    @root.interval(@degree[0])
+    Pitch.get(@absolute_degree[0])
   end
 
   def third
-    @root.interval(@degree[1])
+    Pitch.get(@absolute_degree[1])
   end
 
   def fifth
-    @root.interval(@degree[2])
+    Pitch.get(@absolute_degree[2])
   end
 
   def seventh
-    @root.interval(@degree[3])
+    Pitch.get(@absolute_degree[3])
   end
 
   def nineth
-    @root.interval(@degree[4])
+    Pitch.get(@absolute_degree[4])
   end
 
   def tarnspose(i=0)
@@ -80,7 +83,7 @@ class Chord
       if chord_name.blank?
         full_name = pitch_name
         # pitch_name,chord_nameを再設定する
-        if Settings.signatures.keys.include?(full_name[1])
+        if Settings.signatures.keys.find {|signature| signature.to_s == full_name[1] }
           pitch_name = full_name[0..1]
         else
           pitch_name = full_name[0]

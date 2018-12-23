@@ -5,12 +5,25 @@ RSpec.describe Chord, type: :model do
       it "Cメジャーのオブジェクトが生成されること" do
         @chord = Chord.get("C")
         expect(@chord.root).to eq Pitch.get("C")
-        expect(@chord.degree).to eq [0, 4, 7]
+        expect(@chord.relative_degree).to eq [0, 4, 7]
         expect(@chord.chord_name).to eq "major"
 
         @chord = Chord.get("C")
         expect(@chord.root).to eq Pitch.get("C")
-        expect(@chord.degree).to eq [0, 4, 7]
+        expect(@chord.relative_degree).to eq [0, 4, 7]
+        expect(@chord.chord_name).to eq "major"
+      end 
+    end
+    context '引数1が"C#",引数2がnilのとき' do
+      it "C#メジャーのオブジェクトが生成されること" do
+        @chord = Chord.get("C#")
+        expect(@chord.root).to eq Pitch.get("C#")
+        expect(@chord.relative_degree).to eq [0, 4, 7]
+        expect(@chord.chord_name).to eq "major"
+
+        @chord = Chord.get("C#")
+        expect(@chord.root).to eq Pitch.get("C#")
+        expect(@chord.relative_degree).to eq [0, 4, 7]
         expect(@chord.chord_name).to eq "major"
       end 
     end
@@ -20,7 +33,7 @@ RSpec.describe Chord, type: :model do
       it "Cメジャーのオブジェクトが生成されること" do
         @chord = Chord.new("C")
         expect(@chord.root).to eq Pitch.get("C")
-        expect(@chord.degree).to eq [0, 4, 7]
+        expect(@chord.relative_degree).to eq [0, 4, 7]
         expect(@chord.chord_name).to eq "major"
       end 
     end 
@@ -28,7 +41,7 @@ RSpec.describe Chord, type: :model do
       it "Cマイナーのオブジェクトが生成されること" do
         @chord = Chord.new("Cm")
         expect(@chord.root).to eq Pitch.get("C")
-        expect(@chord.degree).to eq [0, 3, 7]
+        expect(@chord.relative_degree).to eq [0, 3, 7]
         expect(@chord.chord_name).to eq "minor"
       end
     end
@@ -36,7 +49,7 @@ RSpec.describe Chord, type: :model do
       it "Cメジャーのオブジェクトが生成されること" do
         @chord = Chord.new("C", "major")
         expect(@chord.root).to eq Pitch.get("C")
-        expect(@chord.degree).to eq [0, 4, 7]
+        expect(@chord.relative_degree).to eq [0, 4, 7]
         expect(@chord.chord_name).to eq "major"
       end
     end
@@ -44,7 +57,7 @@ RSpec.describe Chord, type: :model do
       it "Cマイナーのオブジェクトが生成されること" do
         @chord = Chord.new("C", "minor")
         expect(@chord.root).to eq Pitch.get("C")
-        expect(@chord.degree).to eq [0, 3, 7]
+        expect(@chord.relative_degree).to eq [0, 3, 7]
         expect(@chord.chord_name).to eq "minor"
       end
     end

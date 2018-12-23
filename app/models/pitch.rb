@@ -32,6 +32,14 @@ class Pitch
     Chord.get(@pitch_name, chord_name)
   end
 
+  def major
+    Chord.get(@pitch_name, "major")
+  end
+
+  def minor
+    Chord.get(@pitch_name, "minor")
+  end
+
   def inspect
     "pitch_name = #{@pitch_name} , @pitch_class = #{@pitch_class}"
   end
