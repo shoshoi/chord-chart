@@ -1,0 +1,115 @@
+pitch:
+  "C":
+    pitch_class: 0
+    locale:
+      ja: "ド"
+  "B#":
+    pitch_class: 0
+    locale:
+      ja: "シ#"
+  "C#":
+    pitch_class: 1
+    locale:
+      ja: "ド#"
+  "Db":
+    pitch_class: 1
+    locale:
+      ja: "レb"
+  "D":
+    pitch_class: 2
+    locale:
+      ja: "レ"
+  "D#":
+    pitch_class: 3
+    locale:
+      ja: "レ#"
+  "Eb":
+    pitch_class: 3
+    locale:
+      ja: "ミb"
+  "E":
+    pitch_class: 4
+    locale:
+      ja: "ミ"
+  "Fb":
+    pitch_class: 4
+    locale:
+      ja: "ファb"
+  "F":
+    pitch_class: 5
+    locale:
+      ja: "ファ"
+  "E#":
+    pitch_class: 5
+    locale:
+      ja: "ミ#"
+  "F#":
+    pitch_class: 6
+    locale:
+      ja: "ファ#"
+  "Gb":
+    pitch_class: 6
+    locale:
+      ja: "ソb"
+  "G":
+    pitch_class: 7
+    locale:
+      ja: "ソ"
+  "G#":
+    pitch_class: 8
+    locale:
+      ja: "ソ#"
+  "Ab":
+    pitch_class: 8
+    locale:
+      ja: "ラb"
+  "A":
+    pitch_class: 9
+    locale:
+      ja: "ラ"
+  "A#":
+    pitch_class: 10
+    locale:
+      ja: "ラ#"
+  "Bb":
+    pitch_class: 10
+    locale:
+      ja: "シb"
+  "B":
+    pitch_class: 11
+    locale:
+      ja: "シ"
+  "Cb":
+    pitch_class: 11
+    locale:
+      ja: "ドb"
+
+signatures:
+  "#": "sharp"
+  "b": "flat"
+
+chords:
+  major:
+    type: "triad"
+    name:
+      - ""
+      - "M"
+      - "CMA"
+      - "maj"
+      - "△"
+    degree:
+      - 0
+      - 4
+      - 7
+  minor:
+    type: "triad"
+    name:
+      - "m"
+      - "mi"
+      - "min"
+      - "-"
+      - "-△"
+    degree:
+      - 0 
+      - 3 
+      - 7

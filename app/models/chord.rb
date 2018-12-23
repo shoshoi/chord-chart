@@ -1,43 +1,91 @@
 class Chord
-  def key
-    @key
+  @@setting = Hashie::Mash.load("config/general/setting.yml")
+  @@chords = []
+  @root = nil
+  @degree = nil
+  @chord_name
+
+  def self.get(pitch_name, chord_name)
+    Rails.logger.debug "Chord#self.get(#{pitch_name}, #{chord_name})"
+    find_chord_name = pitch_name + chord_name
+    found_chord = @@chords.find {|chord| chord.chord_full_name == find_chord_name }
+    if found_chord.blank?
+      found_chord = Chord.new(pitch_name, chord_name)
+      @@chords.push found_chord
+    end
+    found_chord
   end
+
+  def initialize(pitch_name, chord_name=nil)
+    Rails.logger.debug "Chord#initialize(#{pitch_name}, #{chord_name})"
+    if chord_name.blank?
+      # pitch_name,chord_nameを再設定する
+      if @@setting.signatures.keys.include?(pitch_name[1])
+        reset_pitch_name = pitch_name[0..1]
+      else
+        reset_pitch_name = pitch_name[0]
+      end
+
+      pitch_len = reset_pitch_name.length
+      chord_len = pitch_name.length - reset_pitch_name.length
+      chord_short_name = pitch_name[pitch_len, chord_len]
+      reset_chord_name = @@setting.chords.find {|name, value| value.name.include?(chord_short_name) }.first
+
+      pitch_name = reset_pitch_name
+      chord_name = reset_chord_name
+    end
+    set_member(pitch_name, chord_name)
+  end
+
+  def set_member(pitch_name, chord_name="")
+    Rails.logger.debug "Chord#set_member(#{pitch_name}, #{chord_name})"
+    # コード文字列を分解
+    @root = Pitch.get(pitch_name)
+    @chord_name = chord_name
+    @degree = @@setting.chords.send(@chord_name).degree
+  end
+
+  def chord_name
+    @chord_name
+  end 
+
+  def chord_full_name
+    @root.pitch_name + @chord_name
+  end
+
   def root
     @root
   end
-  def signature
-    @signature ||= ""
-  end
-  def scale
-    @scale
-  end
-  def initialize(key=nil, chord=nil)
-    @pitch_list = {
-      "A": 0, "A#": 1, "Bb": 1, "B": 2, "Cb": 2, "B#":3, "C": 3, "C#":4, "Db":4, "D": 5,
-      "D#": 6 ,"Eb": 6, "E": 7, "Fb":7, "F": 8, "F#": 9, "Gb": 9, "G": 10, "Ab": 10, "G#": 11, "Ab": 11}
-    @signature_list = {"#": "sharp", "b": "flat"}
-    @scale_list = {"M": "major", "m": "minor"}
 
-    @key = key || "C"
-    @root = chord[0]
-    @signature = @signature_list[chord[1]] if @signature_list.keys.include?(chord[1])
-
-    scale_start = @signature.blank? ? 1 : 2
-    scale_str = chord[scale_start, chord.length - scale_start]
-    scale_str = "M" if scale_str.blank?
-    @scale = @scale_list[scale_str.to_sym]
+  def degree
+    @degree
   end
-  def interval
-    root_pitch = @pitch_list[key.to_sym]
-    current_pitch = @pitch_list[root.to_sym]
 
-    if current_pitch < root_pitch
-      relative_pitch = 12 - root_pitch + current_pitch
-    else
-      relative_pitch = current_pitch - root_pitch
-    end
+  def unizon
+    @root.interval(@degree[0])
   end
-  def inspect
-    "key=#{key} root=#{root} signature=#{signature} scale=#{scale}\n"
+
+  def third
+    @root.interval(@degree[1])
+  end
+
+  def fifth
+    @root.interval(@degree[2])
+  end
+
+  def seventh
+    @root.interval(@degree[3])
+  end
+
+  def nineth
+    @root.interval(@degree[4])
+  end
+
+  def tarnspose(i=0)
+
+  end
+
+  def transpose!(i=0)
+
   end
 end

@@ -1,51 +1,36 @@
 require 'rails_helper'
-pitch_data = [
-  {
-    key: "C",
-    values: [
-      {value: "C", result: 0 }, {value: "D", result: 2 }, {value: "E", result: 4 }, {value: "F", result: 5 },
-      {value: "G", result: 7 }, {value: "A", result: 9 }, {value: "B", result: 11 },
-    ]
-  }
-]
 RSpec.describe Chord, type: :model do
-  describe 'メソッド' do
-    before do
-      @chord = Chord.new("C","C")
-    end
-    context '#pitch_class' do
-      pitch_data.each do |data|
-        data[:values].each do |value|
-          it "key=#{data[:key]} chord=#{value[:value]}のとき、音程#{value[:result]}を取得する" do
-            @chord = Chord.new(data[:key], value[:value])
-            expect(@chord.key).to eq data[:key]
-            expect(@chord.interval).to eq value[:result]
-          end
-        end
+  describe '#initialize(pitch_name, chord_name)' do
+    context '引数1が"C",引数2がnilのとき' do
+      it "Cメジャーのオブジェクトが生成されること" do
+        @chord = Chord.new("C")
+        expect(@chord.root).to eq Pitch.get("C")
+        expect(@chord.degree).to eq [0, 4, 7]
+        expect(@chord.chord_name).to eq "major"
+      end 
+    end 
+    context '引数1が"Cm",引数2がnilのとき' do
+      it "Cマイナーのオブジェクトが生成されること" do
+        @chord = Chord.new("Cm")
+        expect(@chord.root).to eq Pitch.get("C")
+        expect(@chord.degree).to eq [0, 3, 7]
+        expect(@chord.chord_name).to eq "minor"
       end
     end
-    context "#methods" do
-      it "kari" do
-        @chord.tonic
-        @chord.supertonic
-        @chord.mediant
-        @chord.subdominant
-        @chord.dominant
-        @chord.submediant
-        @chord.leadingtone
-
-        @chord.tonic?
-        @chord.supertonic?
-        @chord.mediant?
-        @chord.subdominant?
-        @chord.dominant?
-        @chord.submediant?
-        @chord.leadingtone?
-
-        @chord.degree_number
-        @chord.degree_name
-        @chord.tarnspose(4)
-        @chord.transpose!(4)
+    context '引数1が"C",引数2が"major"のとき' do
+      it "Cメジャーのオブジェクトが生成されること" do
+        @chord = Chord.new("C", "major")
+        expect(@chord.root).to eq Pitch.get("C")
+        expect(@chord.degree).to eq [0, 4, 7]
+        expect(@chord.chord_name).to eq "major"
+      end
+    end
+    context '引数1が"C",引数2が"minor"のとき' do
+      it "Cマイナーのオブジェクトが生成されること" do
+        @chord = Chord.new("C", "minor")
+        expect(@chord.root).to eq Pitch.get("C")
+        expect(@chord.degree).to eq [0, 3, 7]
+        expect(@chord.chord_name).to eq "minor"
       end
     end
   end
