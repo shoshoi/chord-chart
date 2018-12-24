@@ -7,6 +7,10 @@ class ChordChart
   attribute :scale, String, default: nil
   attribute :children, Array
 
+  def root
+    @key.root
+  end
+
   def initialize(key="C")
     @key = Chord.get(key)
     @scale = @key.chord_name
@@ -34,10 +38,6 @@ class ChordChart
     @children.flatten!
   end
 
-  def root
-    @key.root
-  end
-
   def chart(level=0)
     chords = @children.map do |child|
       case child
@@ -53,6 +53,21 @@ class ChordChart
     when 1
       chords.join(" ")
     end
+  end
+
+  def change_key(pitch)
+    if pitch.is_a?(String)
+      pitch = Pitch.new(pitch)
+    end 
+    @children.map! do |child|
+      case child
+      when ChordChart
+        child.key_change(pitch)
+      when Chord
+        child.transpose(@key.root.interval(pitch))
+      end 
+    end 
+    @key = Chord.get(pitch.name, @scale)
   end
 
   def tonic

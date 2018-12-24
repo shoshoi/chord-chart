@@ -3,6 +3,7 @@ class Pitch
   include Virtus.model
 
   attribute :pitch_name, String, default: nil
+  alias :name :pitch_name
   attribute :pitch_class, Integer, default: nil
 
   validates :pitch_name, presence: true

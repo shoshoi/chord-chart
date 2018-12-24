@@ -58,6 +58,26 @@ RSpec.describe ChordChart, type: :model do
     end 
   end
 
+  describe "#change_key" do
+    before do
+      @chart = ChordChart.new("C")
+    end
+    context '引数がPitch.new("D")のとき' do
+      it "key=Dに転調される" do
+        @chart.add("C | F | G | Am")
+        @chart.change_key(Pitch.get("D"))
+        expect(@chart.chart).to eq "D | G | A | Bm"
+      end
+    end
+    context '引数が"D"のとき' do
+      it "key=Dに転調される" do
+        @chart.add("C | F | G | Am")
+        @chart.change_key("D")
+        expect(@chart.chart).to eq "D | G | A | Bm"
+      end
+    end
+  end
+
   describe "#tonic" do
     before do
       @chart = ChordChart.new("C")
@@ -79,6 +99,7 @@ RSpec.describe ChordChart, type: :model do
       end 
     end 
   end
+
   describe "#meiant" do
     before do
       @chart = ChordChart.new("C")
@@ -89,6 +110,7 @@ RSpec.describe ChordChart, type: :model do
       end 
     end 
   end
+
   describe "#subdominant" do
     before do
       @chart = ChordChart.new("C")
@@ -99,6 +121,7 @@ RSpec.describe ChordChart, type: :model do
       end 
     end 
   end
+
   describe "#dominant" do
     before do
       @chart = ChordChart.new("C")
@@ -109,6 +132,7 @@ RSpec.describe ChordChart, type: :model do
       end 
     end 
   end
+
   describe "#submediant" do
     before do
       @chart = ChordChart.new("C")
@@ -119,6 +143,7 @@ RSpec.describe ChordChart, type: :model do
       end 
     end
   end
+
   describe "#leadingtone" do
     before do
       @chart = ChordChart.new("C")

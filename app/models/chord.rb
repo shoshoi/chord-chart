@@ -8,6 +8,7 @@ class Chord
   attribute :absolute_degree, Array, default: Array.new
   attribute :relative_degree, Array, default: Array.new
 
+
   def initialize(pitch_name, chord_name=nil)
     Rails.logger.debug "Chord#initialize(#{pitch_name}, #{chord_name})"
     pitch_name, chord_name = Chord.format_name(pitch_name, chord_name)
@@ -22,17 +23,18 @@ class Chord
     @absolute_degree = @relative_degree.map {|degree| (@root.pitch_class + degree) % 12 }
   end
 
-  def chord_name
-    @chord_name
+  def short_name
+    @root.pitch_name + Settings.chords.send(chord_name).name.first
   end 
+  alias_method :name, :short_name
 
   def full_name
     @root.pitch_name + @chord_name
-  end
+  end 
 
-  def short_name
-    @root.pitch_name + Settings.chords.send(chord_name).name.first
-  end
+  def chord_name
+    @chord_name
+  end 
 
   def unizon
     Pitch.get(@absolute_degree[0])
