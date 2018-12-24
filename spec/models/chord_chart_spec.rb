@@ -21,6 +21,7 @@ RSpec.describe ChordChart, type: :model do
       end
     end
   end
+
   describe "#add" do
     before do
       @chart = ChordChart.new("C")
@@ -44,6 +45,7 @@ RSpec.describe ChordChart, type: :model do
       end 
     end
   end
+
   describe "#chart" do
     before do
       @chart = ChordChart.new("C")
@@ -52,6 +54,78 @@ RSpec.describe ChordChart, type: :model do
       it "コード進行が出力される" do
         @chart.add([Chord.get("C"), Chord.get("D"), Chord.get("E") ,Chord.get("F")])
         expect(@chart.chart).to eq "C | D | E | F"
+      end 
+    end 
+  end
+
+  describe "#tonic" do
+    before do
+      @chart = ChordChart.new("C")
+    end 
+    context 'キーがCのとき' do
+      it "コードCが出力される" do
+        expect(@chart.tonic).to eq Chord.get("C")
+      end 
+    end 
+  end
+
+  describe "#supertonic" do
+    before do
+      @chart = ChordChart.new("C")
+    end
+    context 'キーがCのとき' do
+      it "コードDmが出力される" do
+        expect(@chart.supertonic).to eq Chord.get("Dm")
+      end 
+    end 
+  end
+  describe "#meiant" do
+    before do
+      @chart = ChordChart.new("C")
+    end
+    context 'キーがCのとき' do
+      it "コードEmが出力される" do
+        expect(@chart.mediant).to eq Chord.get("Em")
+      end 
+    end 
+  end
+  describe "#subdominant" do
+    before do
+      @chart = ChordChart.new("C")
+    end
+    context 'キーがCのとき' do
+      it "コードFが出力される" do
+        expect(@chart.subdominant).to eq Chord.get("F")
+      end 
+    end 
+  end
+  describe "#dominant" do
+    before do
+      @chart = ChordChart.new("C")
+    end
+    context 'キーがCのとき' do
+      it "コードGが出力される" do
+        expect(@chart.dominant).to eq Chord.get("G")
+      end 
+    end 
+  end
+  describe "#submediant" do
+    before do
+      @chart = ChordChart.new("C")
+    end
+    context 'キーがCのとき' do
+      it "コードAが出力される" do
+        expect(@chart.submediant).to eq Chord.get("Am")
+      end 
+    end
+  end
+  describe "#leadingtone" do
+    before do
+      @chart = ChordChart.new("C")
+    end
+    context 'キーがCのとき' do
+      it "コードCが出力される" do
+        expect(@chart.leadingtone).to eq Chord.get("Bm7-5")
       end 
     end 
   end

@@ -54,4 +54,32 @@ class ChordChart
       chords.join(" ")
     end
   end
+
+  def tonic
+
+  end
+
+  def supertonic
+
+  end
+
+  def mediant
+
+  end
+
+  def subdominant
+
+  end
+
+  def dominant
+
+  end
+
+  def submediant
+
+  end
+
+  def leadingtone
+
+  end
 end

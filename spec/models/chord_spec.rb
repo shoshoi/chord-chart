@@ -62,4 +62,22 @@ RSpec.describe Chord, type: :model do
       end
     end
   end
+  describe '#transpose(i)' do
+    context 'コードがCメジャー,引数1が2のとき' do
+      it "Dメジャーのオブジェクトが生成されること" do
+        @chord = Chord.new("C")
+        expect(@chord.transpose(2)).to eq Chord.get("D")
+      end 
+    end 
+  end
+  describe '#transpose!(i)' do
+    context 'コードがCメジャー,引数1が2のとき' do
+      it "Dメジャーのオブジェクトが生成されること" do
+        pending "未実装"
+        @chord = Chord.new("C")
+        @chord.transpose!(2)
+        expect(@chord).to eq Chord.get("D")
+      end 
+    end 
+  end 
 end

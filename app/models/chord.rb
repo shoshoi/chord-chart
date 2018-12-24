@@ -54,12 +54,11 @@ class Chord
     Pitch.get(@absolute_degree[4])
   end
 
-  def tarnspose(i=0)
-
+  def transpose(i=0)
+    @root.transpose(i).chord(chord_name)
   end
 
   def transpose!(i=0)
-
   end
 
   class << self

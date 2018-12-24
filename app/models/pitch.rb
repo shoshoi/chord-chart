@@ -40,6 +40,10 @@ class Pitch
     Chord.get(@pitch_name, "minor")
   end
 
+  def transpose(pitch_class)
+    Pitch.get((@pitch_class + pitch_class) % 12)
+  end
+
   def inspect
     "pitch_name = #{@pitch_name} , @pitch_class = #{@pitch_class}"
   end
