@@ -1,24 +1,31 @@
-# README
+# Usage
+## Pitch
+```
+pitch = Pitch.get("C")
+pitch.major             # => <Chord "C">
+pitch.minor             # => <Chord "Cm">
+pitch.transpose(2)      # => <Pitch "D">
+pitch.interval("D")     # => <Integer 2>
+```
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Chord
+```
+chord = Chord.get("C")
+chord.name              # => <String "C">
+chord.full_name         # => <String "Cmajor">
 
-Things you may want to cover:
+chord.root              # => <Pitch "C">
+chord.unizon            # => <Pitch "C">
+chord.third             # => <Pitch "E">
+chord.fifth             # => <Pitch "G">
 
-* Ruby version
+chord.transpose(2)      # => <Chord "D">
+```
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## ChordChart
+```
+chart = ChordChart.new
+chart.add("C | F | G | Am")
+chart.change_key("D")
+chart.chart             # => <String "D | G | A | Bm">
+```
