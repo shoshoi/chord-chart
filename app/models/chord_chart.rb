@@ -12,7 +12,7 @@ class ChordChart
   end
 
   def initialize(key="C")
-    @key = Chord.get(key)
+    @key = Chord.new(key)
     @scale = @key.chord_name
     @children = Array.new
   end 
@@ -26,7 +26,7 @@ class ChordChart
         chord_str.strip!
         chords = chord_str.split(" ")
         if chords.length == 1
-          Chord.get(chords[0])
+          Chord.new(chords[0])
         else
           chart = ChordChart.new(@key.short_name)
           chart.add(chords.join("|"))
@@ -67,7 +67,7 @@ class ChordChart
         child.transpose(@key.root.interval(pitch))
       end 
     end 
-    @key = Chord.get(pitch.name, @scale)
+    @key = Chord.new(pitch.name, @scale)
   end
 
   def tonic

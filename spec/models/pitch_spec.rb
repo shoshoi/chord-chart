@@ -24,13 +24,13 @@ RSpec.describe Pitch, type: :model do
 
     context '#major' do
       it "Cメジャーコードが生成されること" do
-        expect(@pitch.chord("major")).to eq Chord.get("C", "major")
+        expect(@pitch.chord("major")).to eq Chord.new("C", "major")
       end 
     end
 
     context '#minor' do
       it "Cマイナーコードが生成されること" do
-        expect(@pitch.chord("minor")).to eq Chord.get("C", "minor")
+        expect(@pitch.chord("minor")).to eq Chord.new("C", "minor")
       end
     end
   end

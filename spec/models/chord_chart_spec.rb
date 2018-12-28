@@ -7,16 +7,16 @@ RSpec.describe ChordChart, type: :model do
     end
     context '引数がないとき' do
       it "key=Cmajorで生成される" do
-        expect(@chart.key).to eq Chord.get("C")
-        expect(@chart.root).to eq Pitch.get("C")
+        expect(@chart.key).to eq Chord.new("C")
+        expect(@chart.root).to eq Pitch.new("C")
         expect(@chart.scale).to eq "major"
       end
     end
     context '引数がAmのとき' do
       it "key=Aminorで生成される" do
         @chart = ChordChart.new("Am")
-        expect(@chart.key).to eq Chord.get("Am")
-        expect(@chart.root).to eq Pitch.get("A")
+        expect(@chart.key).to eq Chord.new("Am")
+        expect(@chart.root).to eq Pitch.new("A")
         expect(@chart.scale).to eq "minor"
       end
     end
@@ -28,14 +28,14 @@ RSpec.describe ChordChart, type: :model do
     end
     context '引数がArray[Chord]のとき' do
       it "childrenに格納される" do
-        @chart.add([Chord.get("C"), Chord.get("D"), Chord.get("E") ,Chord.get("F")])
-        expect(@chart.children).to eq [Chord.get("C"), Chord.get("D"), Chord.get("E") ,Chord.get("F")]
+        @chart.add([Chord.new("C"), Chord.new("D"), Chord.new("E") ,Chord.new("F")])
+        expect(@chart.children).to eq [Chord.new("C"), Chord.new("D"), Chord.new("E") ,Chord.new("F")]
       end
     end
     context '引数がStringのとき' do
       it "childrenに格納される" do
         @chart.add("C | D | E | F")
-        expect(@chart.children).to eq [Chord.get("C"), Chord.get("D"), Chord.get("E") ,Chord.get("F")]
+        expect(@chart.children).to eq [Chord.new("C"), Chord.new("D"), Chord.new("E") ,Chord.new("F")]
       end 
     end
     context '引数が入れ子のとき' do
@@ -52,7 +52,7 @@ RSpec.describe ChordChart, type: :model do
     end 
     context 'childrenがArray[Chord]のとき' do
       it "コード進行が出力される" do
-        @chart.add([Chord.get("C"), Chord.get("D"), Chord.get("E") ,Chord.get("F")])
+        @chart.add([Chord.new("C"), Chord.new("D"), Chord.new("E") ,Chord.new("F")])
         expect(@chart.chart).to eq "C | D | E | F"
       end 
     end 
@@ -65,7 +65,7 @@ RSpec.describe ChordChart, type: :model do
     context '引数がPitch.new("D")のとき' do
       it "key=Dに転調される" do
         @chart.add("C | F | G | Am")
-        @chart.change_key(Pitch.get("D"))
+        @chart.change_key(Pitch.new("D"))
         expect(@chart.chart).to eq "D | G | A | Bm"
       end
     end
@@ -84,7 +84,7 @@ RSpec.describe ChordChart, type: :model do
     end 
     context 'キーがCのとき' do
       it "コードCが出力される" do
-        expect(@chart.tonic).to eq Chord.get("C")
+        expect(@chart.tonic).to eq Chord.new("C")
       end 
     end 
   end
@@ -95,7 +95,7 @@ RSpec.describe ChordChart, type: :model do
     end
     context 'キーがCのとき' do
       it "コードDmが出力される" do
-        expect(@chart.supertonic).to eq Chord.get("Dm")
+        expect(@chart.supertonic).to eq Chord.new("Dm")
       end 
     end 
   end
@@ -106,7 +106,7 @@ RSpec.describe ChordChart, type: :model do
     end
     context 'キーがCのとき' do
       it "コードEmが出力される" do
-        expect(@chart.mediant).to eq Chord.get("Em")
+        expect(@chart.mediant).to eq Chord.new("Em")
       end 
     end 
   end
@@ -117,7 +117,7 @@ RSpec.describe ChordChart, type: :model do
     end
     context 'キーがCのとき' do
       it "コードFが出力される" do
-        expect(@chart.subdominant).to eq Chord.get("F")
+        expect(@chart.subdominant).to eq Chord.new("F")
       end 
     end 
   end
@@ -128,7 +128,7 @@ RSpec.describe ChordChart, type: :model do
     end
     context 'キーがCのとき' do
       it "コードGが出力される" do
-        expect(@chart.dominant).to eq Chord.get("G")
+        expect(@chart.dominant).to eq Chord.new("G")
       end 
     end 
   end
@@ -139,7 +139,7 @@ RSpec.describe ChordChart, type: :model do
     end
     context 'キーがCのとき' do
       it "コードAが出力される" do
-        expect(@chart.submediant).to eq Chord.get("Am")
+        expect(@chart.submediant).to eq Chord.new("Am")
       end 
     end
   end
@@ -150,7 +150,7 @@ RSpec.describe ChordChart, type: :model do
     end
     context 'キーがCのとき' do
       it "コードCが出力される" do
-        expect(@chart.leadingtone).to eq Chord.get("Bm7-5")
+        expect(@chart.leadingtone).to eq Chord.new("Bm7-5")
       end 
     end 
   end

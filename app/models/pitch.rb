@@ -11,12 +11,82 @@ class Pitch
 
   def initialize(pitch_name)
     Rails.logger.debug "Pitch#self.get(#{pitch_name})"
+      if pitch_name.is_a?(Integer)
+        pitch_name = Settings.pitch.find {|name, value| pitch_name == value.pitch_class }.first
+      end
     @pitch_name = pitch_name
     @pitch_class = Settings.pitch.send(pitch_name).pitch_class
     if valid?
       # TODO:error
     end
-  end 
+  end
+
+  def ==(pitch)
+    case pitch
+    when Pitch
+      self.pitch_class == pitch.pitch_class
+    else
+      false
+    end
+  end
+
+  def <(pitch)
+    case pitch
+    when Pitch
+      self.pitch_class < pitch.pitch_class
+    else
+      false
+    end 
+  end
+ 
+  def <=(pitch)
+    case pitch
+    when Pitch
+      self.pitch_class <= pitch.pitch_class
+    else
+      false
+    end 
+  end
+
+  def >(pitch)
+    case pitch
+    when Pitch
+      self.pitch_class > pitch.pitch_class
+    else
+      false
+    end 
+  end
+
+  def >=(pitch)
+    case pitch
+    when Pitch
+      self.pitch_class >= pitch.pitch_class
+    else
+      false
+    end 
+  end
+
+  def +(pitch)
+    case pitch
+    when Pitch
+      self.pitch_class += pitch.pitch_class
+    when Integer
+      self.pitch_class += pitch
+    else
+      # error
+    end 
+  end
+
+  def -(pitch)
+    case pitch
+    when Pitch
+      self.pitch_class -= pitch.pitch_class
+    when Integer
+      self.pitch_class -= pitch
+    else
+      # error
+    end
+  end
 
   def interval(pitch_class)
     case pitch_class
@@ -30,39 +100,22 @@ class Pitch
   end
 
   def chord(chord_name)
-    Chord.get(@pitch_name, chord_name)
+    Chord.new(@pitch_name, chord_name)
   end
 
   def major
-    Chord.get(@pitch_name, "major")
+    Chord.new(@pitch_name, "major")
   end
 
   def minor
-    Chord.get(@pitch_name, "minor")
+    Chord.new(@pitch_name, "minor")
   end
 
   def transpose(pitch_class)
-    Pitch.get((@pitch_class + pitch_class) % 12)
+    Pitch.new((@pitch_class + pitch_class) % 12)
   end
 
   def inspect
     "pitch_name = #{@pitch_name} , @pitch_class = #{@pitch_class}"
-  end
-  
-  class << self
-    @@pitchs = Array.new
-
-    def get(pitch_name)
-      Rails.logger.debug "Pitch#self.get(#{pitch_name})"
-      if pitch_name.is_a?(Integer)
-        pitch_name = Settings.pitch.find {|name, value| pitch_name == value.pitch_class }.first
-      end 
-
-      unless found_pitch = @@pitchs.find {|pitch| pitch.pitch_name == pitch_name }
-        found_pitch = Pitch.new(pitch_name)
-        @@pitchs.push found_pitch
-      end 
-      found_pitch
-    end 
   end
 end

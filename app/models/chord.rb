@@ -11,13 +11,22 @@ class Chord
 
   def initialize(pitch_name, chord_name=nil)
     Rails.logger.debug "Chord#initialize(#{pitch_name}, #{chord_name})"
-    pitch_name, chord_name = Chord.format_name(pitch_name, chord_name)
     set_member(pitch_name, chord_name)
   end
 
-  def set_member(pitch_name, chord_name="")
+  def ==(chord)
+    case chord
+    when Chord
+      self.full_name == chord.full_name
+    else
+      false
+    end 
+  end 
+
+  def set_member(pitch_name, chord_name=nil)
     Rails.logger.debug "Chord#set_member(#{pitch_name}, #{chord_name})"
-    @root = Pitch.get(pitch_name)
+    pitch_name, chord_name = Chord.format_name(pitch_name, chord_name)
+    @root = Pitch.new(pitch_name)
     @chord_name = chord_name
     @relative_degree = Settings.chords.send(@chord_name).degree
     @absolute_degree = @relative_degree.map {|degree| (@root.pitch_class + degree) % 12 }
@@ -36,24 +45,28 @@ class Chord
     @chord_name
   end 
 
+  def degree_name(key)
+    
+  end
+
   def unizon
-    Pitch.get(@absolute_degree[0])
+    Pitch.new(@absolute_degree[0])
   end
 
   def third
-    Pitch.get(@absolute_degree[1])
+    Pitch.new(@absolute_degree[1])
   end
 
   def fifth
-    Pitch.get(@absolute_degree[2])
+    Pitch.new(@absolute_degree[2])
   end
 
   def seventh
-    Pitch.get(@absolute_degree[3])
+    Pitch.new(@absolute_degree[3])
   end
 
   def nineth
-    Pitch.get(@absolute_degree[4])
+    Pitch.new(@absolute_degree[4])
   end
 
   def transpose(i=0)
@@ -61,25 +74,10 @@ class Chord
   end
 
   def transpose!(i=0)
+    set_member(Pitch.new((@root + i) % 12).name, chord_name) 
   end
 
   class << self
-    @@chords = Array.new
-    
-    # Chordオブジェクトを生成する
-    def get(pitch_name, chord_name=nil)
-      Rails.logger.debug "Chord#self.get(#{pitch_name}, #{chord_name})"
-      pitch_name, chord_name = Chord.format_name(pitch_name, chord_name)
-      find_chord_name = pitch_name + chord_name
-
-      # 同名コードは1つのインスタンスを使い回す
-      unless found_chord = @@chords.find {|chord| chord.full_name == find_chord_name }
-        found_chord = Chord.new(pitch_name, chord_name)
-        @@chords.push(found_chord)
-      end
-      found_chord
-    end
-
     def format_name(pitch_name, chord_name=nil)
       if chord_name.blank?
         full_name = pitch_name
